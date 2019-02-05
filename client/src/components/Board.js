@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import CardDrawer from "./CardDrawer";
+import HTML5Backend from "react-dnd-html5-backend";
+import { DragDropContext } from "react-dnd";
+import AddCardForm from "./AddCardForm";
 
-export default class Board extends Component {
+class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,16 +13,35 @@ export default class Board extends Component {
         {
           id: "1234",
           name: "Test",
-          cards: [{ id: "1342", name: "test" }, { id: "1232", name: "test2" }]
+          cards: [{ id: "card1", name: "test" }, { id: "card2", name: "test2" }]
         },
         {
           id: "4122",
           name: "Test2",
-          cards: [{ id: "1342", name: "test" }, { id: "1232", name: "test2" }]
+          cards: [{ id: "card3", name: "test" }, { id: "card4", name: "test2" }]
         }
       ]
     };
   }
+
+  // addNewCard ()
+
+  removeCard = (id, columnIndex) => {
+    this.setState(prevState => {
+      const card = prevState.columns[columnIndex].cards.findIndex(
+        card => card.id == id
+      );
+      prevState.columns[columnIndex].cards.splice(card, 1);
+      return prevState;
+    });
+  };
+
+  addCard = (card, columnIndex) => {
+    this.setState(prevState => {
+      prevState.columns[columnIndex].cards.push(card);
+      return prevState;
+    });
+  };
 
   render() {
     return (
@@ -30,10 +52,16 @@ export default class Board extends Component {
               column={column}
               columnIndex={columnIndex}
               key={columnIndex}
+              handleRemove={this.removeCard}
+              handleAdd={this.addCard}
             />
           );
         })}
+
+        <AddCardForm />
       </div>
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(Board);

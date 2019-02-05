@@ -1,19 +1,24 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
-import CardDrawer from "./components/CardDrawer";
 import Board from "./components/Board";
 import "./App.css";
+import "antd/dist/antd.css";
 
-class App extends Component {
+import HTML5Backend from "react-dnd-html5-backend";
+import { DragDropContextProvider } from "react-dnd";
+import { Form } from "antd";
+
+class DrawerForm extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
+      <div>
+        <DragDropContextProvider backend={HTML5Backend}>
           <Board />
-        </header>
+        </DragDropContextProvider>
       </div>
     );
   }
 }
+
+const App = Form.create()(DrawerForm);
 
 export default App;
