@@ -1,0 +1,10 @@
+.Drawer {
+  border: solid;
+  border-color: rgb(252, 252, 252);
+  padding: 20px;
+}
+
+.Card {
+  border: solid;
+  border-color: white;
+}
