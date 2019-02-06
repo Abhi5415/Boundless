@@ -5,6 +5,38 @@ const { Option } = Select;
 
 class AddCardForm extends React.Component {
   state = { visible: false };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: undefined,
+      url: undefined,
+      desc: undefined,
+      note: undefined
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    // TODO: add database submission here
+    const card = {
+      id: "random",
+      name: this.state.name,
+      url: this.state.url,
+      desc: this.state.desc,
+      note: this.state.note
+    };
+    this.props.handleAdd(card);
+    console.log(card);
+    // console.log(this.state.name);
+  }
 
   showDrawer = () => {
     this.setState({
@@ -12,7 +44,7 @@ class AddCardForm extends React.Component {
     });
   };
 
-  onClose = () => {
+  onClose = props => {
     this.setState({
       visible: false
     });
@@ -35,69 +67,52 @@ class AddCardForm extends React.Component {
             height: "calc(100% - 108px)",
             paddingBottom: "108px"
           }}>
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item label="Resource Name">
-                  {getFieldDecorator("name", {
-                    rules: [
-                      { required: true, message: "Enter the resource name" }
-                    ]
-                  })(<Input placeholder="Enter the resource name" />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Url">
-                  {getFieldDecorator("url", {
-                    rules: [{ required: true, message: "Please enter url" }]
-                  })(
-                    <Input
-                      style={{ width: "100%" }}
-                      placeholder="Please enter url"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={5}>
-              <Col span={24}>
-                <Form.Item label="Description">
-                  {getFieldDecorator("description", {
-                    rules: [
-                      {
-                        required: true,
-                        message: "please enter url description"
-                      }
-                    ]
-                  })(
-                    <Input.TextArea
-                      rows={1}
-                      placeholder="please enter url description"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={5}>
-              <Col span={24}>
-                <Form.Item label="Notes">
-                  {getFieldDecorator("note", {
-                    rules: [
-                      {
-                        required: true,
-                        message: "Write your notes here"
-                      }
-                    ]
-                  })(
-                    <Input.TextArea
-                      rows={50}
-                      placeholder="Write your notes here"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Resource:
+              <input
+                type="text"
+                value={this.state.name}
+                name="name"
+                onChange={e => this.handleChange(e, "name")}
+              />
+            </label>
+            <label>
+              URL:
+              <input
+                type="text"
+                value={this.state.url}
+                name="url"
+                onChange={e => this.handleChange(e, "url")}
+              />
+            </label>
+            <label>
+              Description:
+              <input
+                type="text"
+                value={this.state.desc}
+                name="desc"
+                onChange={e => this.handleChange(e, "desc")}
+              />
+            </label>
+            <label>
+              Note:
+              <input
+                type="text"
+                value={this.state.note}
+                name="note"
+                onChange={e => this.handleChange(e, "note")}
+              />
+            </label>
+            <Button
+              type="submit"
+              value="Submit"
+              onClick={this.handleSubmit}
+              type="primary">
+              Submit
+            </Button>
+          </form>
+
           <div
             style={{
               position: "absolute",
@@ -112,7 +127,11 @@ class AddCardForm extends React.Component {
             <Button onClick={this.onClose} style={{ marginRight: 8 }}>
               Cancel
             </Button>
-            <Button onClick={this.onClose} type="primary">
+            <Button
+              type="submit"
+              value="Submit"
+              onClick={this.onClose}
+              type="primary">
               Submit
             </Button>
           </div>

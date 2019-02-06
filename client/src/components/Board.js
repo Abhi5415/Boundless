@@ -3,6 +3,8 @@ import CardDrawer from "./CardDrawer";
 import HTML5Backend from "react-dnd-html5-backend";
 import { DragDropContext } from "react-dnd";
 import AddCardForm from "./AddCardForm";
+import CardTray from "./CardTray";
+import CreateColumn from "./CreateColumn";
 
 class Board extends Component {
   constructor(props) {
@@ -18,9 +20,14 @@ class Board extends Component {
         {
           id: "4122",
           name: "Test2",
-          cards: [{ id: "card3", name: "test" }, { id: "card4", name: "test2" }]
+          cards: [{ id: "card3", name: "test" }, { id: "card4", name: "test4" }]
         }
-      ]
+      ],
+      tray: {
+        id: "123122",
+        name: "TRAY",
+        cards: [{ id: "card5", name: "test" }, { id: "card5", name: "test6" }]
+      }
     };
   }
 
@@ -36,9 +43,37 @@ class Board extends Component {
     });
   };
 
+  removeCardFromTray = id => {
+    this.setState(prevState => {
+      const card = prevState.tray.cards.findIndex(card => card.id == id);
+      prevState.tray.cards.splice(card, 1);
+      return prevState;
+    });
+  };
+
   addCard = (card, columnIndex) => {
     this.setState(prevState => {
       prevState.columns[columnIndex].cards.push(card);
+      return prevState;
+    });
+  };
+
+  addCardToTray = card => {
+    this.setState(prevState => {
+      prevState.tray.cards.push(card);
+      return prevState;
+    });
+  };
+
+  addColumn = name => {
+    const newColumn = {
+      id: "",
+      name: name,
+      cards: []
+    };
+    console.log(newColumn);
+    this.setState(prevState => {
+      prevState.columns.push(newColumn);
       return prevState;
     });
   };
@@ -58,7 +93,15 @@ class Board extends Component {
           );
         })}
 
-        <AddCardForm />
+        <AddCardForm handleAdd={this.addCardToTray} />
+        <CardTray
+          column={this.state.tray}
+          columnIndex={2}
+          key={2}
+          handleRemove={this.removeCardFromTray}
+          handleAdd={this.addCardToTray}
+        />
+        <CreateColumn handleAdd={this.addColumn} />
       </div>
     );
   }
